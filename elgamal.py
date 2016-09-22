@@ -20,7 +20,6 @@ class elgamal:
     def __str__(self):
         return "public key: %s\nprivate key: %s" % (self.public_key, self.private_key)
 
-    ##############
     def create_key(self,bits=30):
         p = get_prime(bits)
         q = random.randint(1,p-1)
@@ -30,7 +29,10 @@ class elgamal:
         self.public_key = [p, q, d]
         self.private_key = [p, q, k]
 
-    ###############
+    def set_key(self, pu_key, pr_key):
+        self.public_key = pu_key
+        self.private_key = pr_key
+                
     def encrypt(self, text):
         p, q, d = self.public_key[0], self.public_key[1], self.public_key[2]
 
@@ -47,7 +49,6 @@ class elgamal:
             c2.append((pow(d,k1,p)*i)%p)   
         return c1,c2
 
-    ################
     def decrypt(self,cipher):
         p, k = self.private_key[0], self.private_key[2]
         c1, c2 = cipher[0], cipher[1]
