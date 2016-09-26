@@ -1,5 +1,6 @@
 import math
 import time
+import hashlib
 
 class attack:
     def __init__(self):
@@ -7,6 +8,17 @@ class attack:
     def find_private_key(self, pub_key):
         p, q, d = pub_key[0], pub_key[1], pub_key[2]
         return shank(p, q, d)
+    def forge(self, text,pub_key):
+        p, q, d = pub_key[0], pub_key[1], pub_key[2]
+        h = int(hashlib.md5(text).hexdigest(),16)
+        h = h % (p-1)
+        for e in xrange(p):
+            r = (pow(q,e,p)*d) % p
+            s = -r % (p - 1)
+            if h == e*s % (p-1):
+                return r, s
+        return None
+
 
 """
 BEGIN TEMP FUNCTION
@@ -54,11 +66,26 @@ END TEMP FUNCTION
 
 
 def main():
-
+    """
     begin = time.time()
     #51751742255297
     print shank(182806019700907, 7253258872651, 48982943472108)
     print time.time() - begin
+    """
+    from elgamal import elgamal
+    a = elgamal(20)
+    #print a
+    text = "hello"
+    
+    c = attack()
+    ck = c.forge(text, a.public_key)
+    if ck == None:
+        print "Ko the gia mao"
+        return
+    print ck
+    from verification import verification
+    b_veri = verification(a.public_key)
+    print b_veri.verify(text,ck)
     
 if __name__ == "__main__":
     main()
