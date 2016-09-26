@@ -80,7 +80,7 @@ def main():
     c = attack()
     ck = c.forge(text, a.public_key)
     if ck == None:
-        print "Ko the gia mao"
+        print "can't forge"
         return
     print ck
     from verification import verification
