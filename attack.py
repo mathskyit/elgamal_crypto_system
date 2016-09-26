@@ -8,7 +8,8 @@ class attack:
     def find_private_key(self, pub_key):
         p, q, d = pub_key[0], pub_key[1], pub_key[2]
         return shank(p, q, d)
-    def forge(self, text,pub_key):
+
+    def forge_signature(self, text, pub_key):
         p, q, d = pub_key[0], pub_key[1], pub_key[2]
         h = int(hashlib.md5(text).hexdigest(),16)
         h = h % (p-1)
@@ -78,9 +79,9 @@ def main():
     text = "hello"
     
     c = attack()
-    ck = c.forge(text, a.public_key)
+    ck = c.forge_signature(text, a.public_key)
     if ck == None:
-        print "can't forge"
+        print "Ko the gia mao"
         return
     print ck
     from verification import verification
